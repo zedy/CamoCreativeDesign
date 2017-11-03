@@ -1,0 +1,17 @@
+name: Camo
+type: theme
+description: This is a Camo sub theme of Classy
+core: 8.x
+# Defines the base theme
+base theme: stable
+# Defines libraries group in which we can add css/js.
+libraries:
+  - camo/global-styling
+# Regions
+regions:
+  header: Header
+  featured: Featured
+  content: Content
+  contact: Contact
+  sidebar_first: First sidebar
+  footer: Footer

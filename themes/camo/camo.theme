@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * @file
+ * Classy sub-theme.
+ *
+ * Place your custom PHP code in this file.
+ */
+use Drupal\block\Entity\Block;
+use Drupal\User\Entity\User;
+
+function camo_preprocess_page(&$variables) {
+  $menu = Block::load('camo_main_menu');
+  $variables['menu'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($menu);
+}
+
+function camo_preprocess_html(&$variables) {
+  $variables['frontpage'] = \Drupal::service('path.matcher')->isFrontPage();
+
+  $author = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'name' => 'author',
+      'content' => 'Aleksandar Zedi - aca985@gmail.com',
+    ],
+  ];
+
+  $description = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'name' => 'description',
+      'content' => 'Freelance graphical design - 
+      creative and unique designs for logos, prints, stickers, web design, illustrations and more.',
+    ],
+  ];
+
+  $keywords = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'name' => 'keywords',
+      'content' => 'Sticker design, logo designer, logo design, graphic designer, freelance work, freelancer, print material, digital artist,
+digital artwork, photoshop, illustartor, inkscape, urban style, comic style, bold design, vector, sport logos, 
+typeface, typography, design, creative',
+    ],
+  ];
+
+  $titleFB = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'property' => 'og:title',
+      'content' => 'Camo creative design',
+    ],
+  ];
+
+  $imageFB = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'property' => 'og:image',
+      'content' => '/themes/camo/assets/img/logo.jpg',
+    ],
+  ];
+
+  $descriptionFB = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'property' => 'og:description',
+      'content' => 'Freelance graphical design - 
+      creative and unique designs for logos, prints, stickers, web design, illustrations and more.',
+    ],
+  ];
+
+  $variables['page']['#attached']['html_head'][] = [$author, 'author'];
+  $variables['page']['#attached']['html_head'][] = [$description, 'description'];
+  $variables['page']['#attached']['html_head'][] = [$keywords, 'keywords'];
+
+  $variables['page']['#attached']['html_head'][] = [$descriptionFB, 'og:description'];
+  $variables['page']['#attached']['html_head'][] = [$imageFB, 'og:image'];
+  $variables['page']['#attached']['html_head'][] = [$titleFB, 'og:title'];
+
+}
+
+function camo_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'webform_submission_contact_node_1_add_form') {
+    $form['actions']['submit']['#validate'][] = 'camo_custom_validate';
+  }
+}
+
+function camo_custom_validate(&$form, $form_state) {
+  $checkbox = (int)$form_state->getValue('anti_spam_prevention');
+  $hidden = $form_state->getValue('captcha_test');
+
+  if ($checkbox == 1 && !empty($hidden)) {
+    $form_state->setErrorByName('captcha_test', 'You filled out a hidden field, mr.Bot');
+  } else if ($checkbox == 1 && empty($hidden)) {
+    $form_state->setErrorByName('captcha_test', 'You filled out a hidden field, mr.Bot');
+  }
+}

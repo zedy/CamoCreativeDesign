@@ -1,0 +1,18 @@
+global-styling:
+  version: 1.x
+  css:
+    base:
+      assets/css/libs/bootstrap-reboot.min.css: {}
+      assets/css/libs/bootstrap-grid.min.css: {}
+      assets/css/libs/jquery.fancybox.min.css: {}
+    theme:
+      assets/css/main.min.css: {}
+  fonts:
+    css:
+      theme:
+      '//fonts.googleapis.com/css?family=Encode+Sans+Condensed:400,700': { type: external, minified: true }
+  js:
+    assets/js/libs/jquery.fancybox.min.js: {}
+    assets/js/main.min.js: {}
+#  dependencies:
+#      - core/jquery
